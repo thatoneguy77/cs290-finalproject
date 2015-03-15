@@ -1,0 +1,81 @@
+<?php
+session_start();
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<meta charset="UTF-8">
+		<title>Login</title>
+		<script type="text/javascript">
+		function differentAjaxStuff(){
+			var request = new XMLHttpRequest();
+			gUsername = "username=";
+    		gUsername += document.getElementById("username").value;
+    		if(document.getElementById("username").value === ""){
+    			var log = document.getElementById("username");
+    			log.value = "Enter a username";
+    			return;
+    		}
+    		gPassword = "&password=";
+    		gPassword += document.getElementById("password").value;
+    		if(document.getElementById("password").value === ""){
+    			alert("Enter a password")
+    			return;
+    		}
+    		request.open('POST', 'http://web.engr.oregonstate.edu/~kernsbi/finalProject/newAcct.php');
+    		request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+  			request.send(gUsername + gPassword);
+			request.onreadystatechange = function() {
+    			if(this.readyState === 4 && this.status === 200) {
+    				if(this.responseText === "Execute failed: (1062) Duplicate entry 'kernsbi' for key 'PRIMARY'"){
+    					alert("UserName is already taken");
+    				}
+                    else{
+                        alert("You can now login");
+                    }
+    			}
+  			};
+  		}
+  		function anotherDifferentAjaxStuff(){
+  			var request = new XMLHttpRequest();
+			gUsername = "username=";
+    		gUsername += document.getElementById("username").value;
+    		if(document.getElementById("username").value === ""){
+    			var log = document.getElementById("username");
+    			log.value = "Enter a username";
+    			return;
+    		}
+    		gPassword = "&password=";
+    		gPassword += document.getElementById("password").value;
+    		if(document.getElementById("password").value === ""){
+    			alert("Enter a password")
+    			return;
+    		}
+    		request.open('POST', 'http://web.engr.oregonstate.edu/~kernsbi/finalProject/oldAcct.php');
+    		request.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+  			request.send(gUsername + gPassword);
+			request.onreadystatechange = function() {
+    			if(this.readyState === 4 && this.status === 200) {
+    				if(this.responseText === "all good"){
+    					window.location.href = 'http://web.engr.oregonstate.edu/~kernsbi/finalProject/home.php';
+    				}
+    				else if(this.responseText === "not good"){
+    					alert("Wrong username or password")
+    				}
+    			}
+  			};
+  		}
+		</script>
+	</head>
+	<body>
+		<div class="block"></div>
+		<h1>A website that totally isn't IMDB, in fact it's called IMDC.  100% different.</h1>
+		<div class="login">
+				UserName <input type="text" name="username" id="username" required><br>
+				Password <input type="password" name="password" id="password" style="margin-left:14px; margin-top:5px; margin-bottom:5px"><br>
+				<button onclick="differentAjaxStuff()" style="width:300px; font-size:100%">Create Account</button>
+				<button onclick="anotherDifferentAjaxStuff()" style="width:166px; margin-left:5px; font-size:100%">Login</button><br>
+		</div>
+	</body>
+</html>
